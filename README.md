@@ -1,9 +1,9 @@
+[*View full code on github*](https://github.com/nidhinonda/Fake-News-Detection/blob/master/fake_news_detection.ipynb)
 # Introduction
 
 Social media is a very fast-growing thing from the last decade. Most of the information generating today come from social media. In some cases, social media can have the capability of spreading the news more quickly than newspaper Media, TV media.And fake news can be spread just like a bush fire.\
 Dataset contains categorical data, we need to apply some transformations before applying ML algorithms. As fake news detection dataset involves textual data, A special processing should be
-done.ML provides Natural Language Processing techniques for handling textual datasets. 
-![Image](C:\Users\Nidhi\Downloads\fake.jpg)
+done.ML provides Natural Language Processing techniques for handling textual datasets.
 
 ## How to detect fake news?
 
@@ -11,7 +11,8 @@ People can read the news and cross-check by googling it.Later it can be credited
 OR\
 We can show an algorithm huge number of fake and real news articles so that it learns to differenciate between them automatically, and then it will give a probability score or percentage of confidence as an output for a given news article, that it is real or fake.
 
-## Let's get started
+## Let's get started!
+Dataset for this project can be [*downloaded*](https://drive.google.com/file/d/1er9NJTLUA3qnRuyhfzuN0XUsoIC4a-_q/view) here.
 ### Importing libraries
 ```import pandas as pd  
 import numpy as np  
@@ -19,22 +20,31 @@ import matplotlib.pyplot as plt
 import seaborn as sns 
 %matplotlib inline
 ```
+![Screenshot (27)](https://user-images.githubusercontent.com/66662814/87588057-a9262c00-c700-11ea-8c0c-3962d92f5dd5.png)
 ### Loading Dataset
 ```
 df=pd.read_csv('news.csv')
 df.head()
 ```
+![Screenshot (17)](https://user-images.githubusercontent.com/66662814/87587034-2c468280-c6ff-11ea-9318-cbc788c55f49.png)
 
+#### DataFlair - Get the labels
 ```
-#DataFlair - Get the labels
 labels=df.label
 labels.head()
 ```
+![Screenshot (26)](https://user-images.githubusercontent.com/66662814/87588122-bd6a2900-c700-11ea-822a-dfaf253a21b2.png)
+
 ### Checking class distributions
 ```
 df.groupby("label")['title'].count().plot.bar()
 ```
-### Creating stopwords for cleaning the text
+![Screenshot (18)](https://user-images.githubusercontent.com/66662814/87587144-5a2bc700-c6ff-11ea-9e0a-88159e20e304.png)
+## Pre-Processing
+
+### Tokenizing
+When working with any kind of text, the first step is separating each article’s body text into tokens to get a corpus.
+We chose to combine nltk and wordcloud stopwords despite more than 90% elements as same, because decontractions became easy with this approach.
 ```
 import nltk
 nltk.download('stopwords')
@@ -49,7 +59,13 @@ nltk_stopwords.extend(wordcloud_stopwords)
 stopwords = set(nltk_stopwords)
 print(stopwords)
 ```
+![Screenshot (28)](https://user-images.githubusercontent.com/66662814/87588518-703a8700-c701-11ea-8272-8ae6cd3cbdb6.png)
 ### Cleaning the title feature
+1.We remove urls (if any)
+2.Perform decontractions
+3.Non-acronize few popular words
+4.Remove punctuations and all special characters
+5.Remove stopwords
 ```
 import re
 def clean(text):
@@ -183,6 +199,7 @@ print(X_test.shape, y_test.shape)
 (1267, 3) (1267,)
 
 ### Using sklearn TfidfVectorizer
+Once the text is processed, it is converted into features using Tfidfvectorizer. This vectorizer first calculates the term-frequency (TF) — number of times a word appears in a document divided by the total number of words in the document. Next, it calculates the inverse data frequency (IDF) — the log of the number of documents divided by the number of documents that contain a word. Finally, the TF-IDF score for a word is the TF x IDF.
 ```
 from sklearn.feature_extraction.text import TfidfVectorizer
 
@@ -194,6 +211,9 @@ X_te = vectorizer.transform(X_test.text)
 
 print(X_tr.shape, X_te.shape)
 ```
+(5068, 5843) (1267, 5843)
+## Creating model
+SGD Classifier implements regularised linear models with Stochastic Gradient Descent.Stochastic gradient descent considers only 1 random point while changing weights unlike gradient descent which considers the whole training data. As such SGD is much faster than gradient descent when dealing with large data sets.Logistic Regression by default uses Gradient Descent and as such it would be better to use SGD Classifier on larger data sets.
 ### Hyperparameter tuning Logistic Regression
 ```
 from sklearn.linear_model import SGDClassifier
@@ -232,6 +252,8 @@ plt.show()
 
 print(gs.best_params_)
 ```
+![Screenshot (20)](https://user-images.githubusercontent.com/66662814/87587383-a414ad00-c6ff-11ea-809b-d06b2cccdb7c.png)
+
 ### Training on best parameters
 ```
 clf = SGDClassifier(loss='log',alpha=1e-06, random_state=42).fit(X_tr,y_train)
@@ -241,16 +263,20 @@ print('Test score : %f' % clf.score(X_te,y_test))
 ```
 Training score : 1.000000
 Test score : 0.928966\
+## Prediction
 ```
 print(classification_report(y_train.values, clf.predict(X_tr)))
 confusion_matrix(y_train, clf.predict(X_tr))
 ```
+![Screenshot (21)](https://user-images.githubusercontent.com/66662814/87587464-bee72180-c6ff-11ea-8821-093e9e038e7e.png)
 ### Final Test Scores
 ```
 print(classification_report(y_test.values, clf.predict(X_te)))
 pd.DataFrame(confusion_matrix(y_test, clf.predict(X_te)))
 ```
+![Screenshot (24)](https://user-images.githubusercontent.com/66662814/87587515-d0302e00-c6ff-11ea-9922-7193a7be6882.png)
 ### Top 50 n-grams
+N-grams are basically a set of words that occur simultaneously within a given window.Here is the code to display top 50 n-grams that occur.
 ```
 coef = [abs(i) for i in clf.coef_.ravel()]
 feature_names = vectorizer.get_feature_names()
@@ -275,6 +301,8 @@ ax.set_title('Top 50 Features')
 
 plt.show()
 ```
+
+![Screenshot (22)](https://user-images.githubusercontent.com/66662814/87587555-dd4d1d00-c6ff-11ea-904a-bc8c12a0896e.png)
 ### Bottom 50 n-grams
 ```
 feature_imp = dict(zip(feature_names,coef))
@@ -298,6 +326,10 @@ ax.set_title('Least 50 important features')
 
 plt.show()
 ```
+![Screenshot (23)](https://user-images.githubusercontent.com/66662814/87587602-ea6a0c00-c6ff-11ea-97b8-e2b272bd17f4.png)
+
+Similarly,others models like Support Vector Machines(SVM),Random Forest Classifier(RFC),Decision Tree Classifier is used to compare the performance.
+
 
 
 
