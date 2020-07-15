@@ -1,4 +1,3 @@
-[*View full code on github*](https://github.com/nidhinonda/Fake-News-Detection/blob/master/fake_news_detection.ipynb)
 # Introduction
 
 Social media is a very fast-growing thing from the last decade. Most of the information generating today come from social media. In some cases, social media can have the capability of spreading the news more quickly than newspaper Media, TV media.And fake news can be spread just like a bush fire.\
@@ -14,7 +13,8 @@ We can show an algorithm huge number of fake and real news articles so that it l
 ## Let's get started!
 Dataset for this project can be [*downloaded*](https://drive.google.com/file/d/1er9NJTLUA3qnRuyhfzuN0XUsoIC4a-_q/view) here.
 ### Importing libraries
-```import pandas as pd  
+```
+import pandas as pd  
 import numpy as np  
 import matplotlib.pyplot as plt 
 import seaborn as sns 
