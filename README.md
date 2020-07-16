@@ -1,12 +1,12 @@
 # Introduction
 
-Social media is a very fast-growing thing from the last decade. Most of the information generating today come from social media. In some cases, social media can have the capability of spreading the news more quickly than newspaper Media, TV media.And fake news can be spread just like a bush fire.   
+Social media is a very fast-growing thing from the last decade. Most of the information generating today come from social media. In some cases, social media can have the capability of spreading the news more quickly than newspaper Media, TV media.And fake news can be spread just like a bush fire.    
 Dataset contains categorical data, we need to apply some transformations before applying ML algorithms. As fake news detection dataset involves textual data, A special processing should be
 done.ML provides Natural Language Processing techniques for handling textual datasets.
 
 ## How to detect fake news?
 
-People can read the news and cross-check by googling it.Later it can be credited as real or fake depending on the results that we find. 
+People can read the news and cross-check by googling it.Later it can be credited as real or fake depending on the results that we find.  
 OR  
 We can show an algorithm huge number of fake and real news articles so that it learns to differenciate between them automatically, and then it will give a probability score or percentage of confidence as an output for a given news article, that it is real or fake.
 
@@ -187,6 +187,8 @@ def clean(text):
 df['text'] = df['text'].map(lambda x: clean(x))
 df.text.iloc[:3] #selects rows and columns by number(3 rows seledcted)
 ```
+![Screenshot (30)](https://user-images.githubusercontent.com/66662814/87627143-aef52f00-c74b-11ea-8b27-81f8c56bad7f.png)
+
 ### Splitting into train,test and CV
 ```
 from sklearn.model_selection import train_test_split
