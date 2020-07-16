@@ -330,7 +330,7 @@ plt.show()
 ```
 ![Screenshot (23)](https://user-images.githubusercontent.com/66662814/87587602-ea6a0c00-c6ff-11ea-97b8-e2b272bd17f4.png)
 
-Similarly,others models like Support Vector Machines(SVM),Random Forest Classifier(RFC),Decision Tree Classifier is used to compare the performance.
+Similarly,other models like Support Vector Machines(SVM),Random Forest Classifier(RFC),Decision Tree Classifier is used to compare the performance.
 
 
 
